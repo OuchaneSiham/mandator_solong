@@ -6,7 +6,7 @@
 /*   By: souchane <souchane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 15:28:31 by souchane          #+#    #+#             */
-/*   Updated: 2024/02/24 20:39:29 by souchane         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:27:08 by souchane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,15 @@ int ft_check(char *f_str)
 	}
 	return (fd);
 }
+
+int	strtab(char **tab)
+{
+	int i;
+	i = 0;
+	while(tab[i])
+		i++;
+	return i;
+}
 void checkmap(char **tab)
 {
 	int 	len;
@@ -128,7 +137,7 @@ void check_coll(t_game *game)
 		j = -1;
 		while (game->map[i][++j])
 		{
-			if (game->map[i][j] != 'C')
+			if (game->map[i][j] == 'C')
 				len++;
 		}
 		i++;
@@ -152,7 +161,7 @@ void check_player(t_game *game)
 		j = -1;
 		while (game->map[i][++j])
 		{
-			if (game->map[i][j] != 'P')
+			if (game->map[i][j] == 'P')
 			{
 				game->x_player = j;
 				game->y_player = i;
@@ -180,7 +189,7 @@ void check_exit(t_game *game)
 		j = -1;
 		while (game->map[i][++j])
 		{
-			if (game->map[i][j] != 'E')
+			if (game->map[i][j] == 'E')
 			{
 				game->x_exit = j;
 				game->y_exit = i;
@@ -217,12 +226,53 @@ void check_none_char(t_game *game)
 		i++;
 	}
 }
+
+void flood_fill(char **tab, int x, int y)
+{
+	if (tab[y][x] != '0' && tab[y][x] != 'C'  && tab[y][x] != 'P')
+		return ;
+	tab[y][x] = 'S';
+	flood_fill(tab, x - 1, y);
+	flood_fill(tab, x + 1, y);
+	flood_fill(tab, x , y - 1);
+	flood_fill(tab, x , y + 1);
+}
+
+void check_path(t_game *game)
+{
+	int x;
+	int y;
+	int i;
+	int j;
+	char **tab;
+
+	tab = game->map;
+	x = game->x_player;
+	y = game->y_player;
+	flood_fill(tab, x, y);
+	i = 0;
+	while(tab[i])
+	{
+		j = 0;
+		while(tab[i][j])
+		{
+			if (tab[i][j] == 'C')
+			{
+				printf("Error\nplayer can not access to all colles.!\n");
+				exit(1);
+			}
+			j++;
+		}
+		i++;
+	}
+}
 void check_char(t_game *game)
 {
 	check_player(game);
 	check_coll(game);
 	check_exit(game);
 	check_none_char(game);
+	check_path(game);
 }
 void run(char *str)
 {
@@ -232,6 +282,8 @@ void run(char *str)
 	game.map = ft_split(str, '\n');
 	checkmap(game.map);
 	check_char(&game);
+
+	
 	// int i = 0;
 // 	while (game.map[i])
 // 	{
