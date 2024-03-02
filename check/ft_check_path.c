@@ -6,7 +6,7 @@
 /*   By: souchane <souchane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:23:37 by souchane          #+#    #+#             */
-/*   Updated: 2024/02/26 18:46:43 by souchane         ###   ########.fr       */
+/*   Updated: 2024/02/27 20:34:25 by souchane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void check_path(t_game *game)
 	int j;
 	char **tab;
 
-	tab = game->map;
+	tab = ft_split(game->map_str, '\n');
 	x = game->x_player;
 	y = game->y_player;
 	flood_fill(tab, x, y);

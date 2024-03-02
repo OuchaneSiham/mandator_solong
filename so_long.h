@@ -6,7 +6,7 @@
 /*   By: souchane <souchane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:40:37 by souchane          #+#    #+#             */
-/*   Updated: 2024/02/26 18:55:40 by souchane         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:15:42 by souchane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <string.h>
 #include <fcntl.h>
 # include <limits.h>
+#include <mlx.h>
 
 typedef struct s_game
 {
@@ -27,6 +28,18 @@ typedef struct s_game
 	int	y_player;
 	int	x_exit;
 	int	y_exit;
+	void *mlx;
+	void *mlx_win;
+	int win_h;
+	int win_w;
+	void *wall;
+	void *floor;
+	void *player;
+	void *exit;
+	void *coll;
+	int count;
+
+	
 } t_game;
 
 // #define BUFFER_SIZE 1
@@ -62,4 +75,14 @@ int		ft_strtab(char **tab);
 int		ft_strcmp(char *s1, char *s2);
 //game
 void	run(char *str);
+void checkwin(t_game *game);
+void	buildimgs(t_game *game);
+
+//move
+int  move(int key, t_game *game);
+void move_right(t_game *game);
+void move_left(t_game *game);
+void move_down(t_game *game);
+void move_up(t_game *game);
+int quit(t_game *game);
 #endif
